@@ -1,6 +1,6 @@
 # DevPipeline Docs
 
-welcome to the docs
+welcome to the devpipeline docs
 - learnt
 - rebase
 - three-way
