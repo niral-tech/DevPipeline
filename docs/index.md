@@ -1,3 +1,6 @@
 # DevPipeline Docs
 
-- tweak for three-way
+- learnt
+- rebase
+- three-way
+- fast-forward
