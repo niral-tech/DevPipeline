@@ -5,3 +5,5 @@ welcome to the docs where we talk about this project
 - rebase
 - three-way
 - fast-forward
+
+- learning to stimulate git fetch
