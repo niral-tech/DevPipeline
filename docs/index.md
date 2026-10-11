@@ -7,3 +7,5 @@ welcome to the docs where we talk about this project and update it from time to 
 - fast-forward
 
 - learning to stimulate git fetch
+
+- changing to test merge commit
