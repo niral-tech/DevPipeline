@@ -22,9 +22,9 @@ git clone https://github.com/niral-tech/DevPipeline.git
 | Github | Collaboration |
 | VSCode | Markdown preview |
 
-##Contributing-Note
+## Contributing-Note
 
-###how to contribute to our project?
+### how to contribute to our project?
 1. clone the project using this command: git clone https://github.com/niral-tech/DevPipeline.git
 2. create a feature branch
 2. raise a PR with your change
