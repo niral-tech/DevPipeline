@@ -29,3 +29,6 @@ git clone https://github.com/niral-tech/DevPipeline.git
 2. create a feature branch
 2. raise a PR with your change
 3. wait for the approval
+
+# Add a Logo
+<adding an image>
