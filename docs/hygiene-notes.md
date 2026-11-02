@@ -1,0 +1,6 @@
+why a removable file is still recoverable:
+
+git rm --cached
+
+what does that mean for a leaked credential
+
