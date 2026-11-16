@@ -41,6 +41,8 @@ jobs:
 
   coverage:
     runs-on: ubuntu-latest
+    outputs:
+      pct: ${{ steps.pct.outputs.pct }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -49,8 +51,34 @@ jobs:
       - run: npm ci
       - name: Run tests with coverage
         run: npm run test
+      - name: Compute line-coverage percentage
+        id: pct
+        run: |
+          PCT=$(node -p "require('./coverage/coverage-summary.json').total.lines.pct")
+          echo "Line coverage: $PCT%"
+          echo "coverage=$PCT" >> $GITHUB_OUTPUT
       - uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: coverage/
           retention-days: 5
+  
+  report:
+    needs: coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show coverage from upstream job
+        run: |
+          echo "Coverage reported by the coverage job: ${{ needs.coverage.outputs.pct }}%"
+          echo "### Coverage: ${{ needs.coverage.outputs.pct }}%" >> "$GITHUB_STEP_SUMMARY"
+
+  gate:
+    needs: report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run test
