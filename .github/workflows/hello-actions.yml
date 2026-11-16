@@ -1,0 +1,23 @@
+name: Hello Actions
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  hello:
+      runs-on: ubuntu-latest
+      steps:
+         - name: Check out the repository
+           uses: actions/checkout@v7
+         - name: Print runner information
+            run: |
+              echo "Runner OS: $RUNNER_OS"
+              echo "Host: $(hostname)"
+              echo "Workflow: $GITHUB_WORKFLOW"
+         - name: Echo a custom message
+            run: echo "hello from the devpipeline pipeline!"
