@@ -15,9 +15,9 @@ jobs:
          - name: Check out the repository
            uses: actions/checkout@v7
          - name: Print runner information
-            run: |
+           run: |
               echo "Runner OS: $RUNNER_OS"
               echo "Host: $(hostname)"
               echo "Workflow: $GITHUB_WORKFLOW"
          - name: Echo a custom message
-            run: echo "hello from the devpipeline pipeline!"
+           run: echo "hello from the devpipeline pipeline!"
