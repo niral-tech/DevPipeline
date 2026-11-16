@@ -56,7 +56,7 @@ jobs:
         run: |
           PCT=$(node -p "require('./coverage/coverage-summary.json').total.lines.pct")
           echo "Line coverage: $PCT%"
-          echo "coverage=$PCT" >> $GITHUB_OUTPUT
+          echo "pct=$PCT" >> $GITHUB_OUTPUT
       - uses: actions/upload-artifact@v7
         with:
           name: coverage-report
