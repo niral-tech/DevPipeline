@@ -83,7 +83,7 @@ jobs:
       - run: npm ci
       - run: npm run test
 
-    context:
+  context:
     runs-on: ubuntu-latest
     env: 
       APP: ${{ vars.APP_NAME }}
