@@ -101,13 +101,3 @@ jobs:
         run: |
           echo "The next line prints the secret on purpose"
           echo "Token: $TOKEN"
-
-  comment-demo:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    permissions:
-      pull-requests: write
-    env:
-      GH_TOKEN: ${{ github.token }}
-    steps:
-      - run: gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body "permissions demo"
