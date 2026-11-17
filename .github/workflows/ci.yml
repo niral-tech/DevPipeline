@@ -105,6 +105,8 @@ jobs:
   comment-demo:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
