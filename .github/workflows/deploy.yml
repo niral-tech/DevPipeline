@@ -1,0 +1,57 @@
+name: Deploy to Pages
+
+# CONTINUOUS DEPLOYMENT (Part 1). This workflow runs AFTER the CI workflow completes
+# (workflow_run), and a guard makes it deploy ONLY when that CI run concluded successfully —
+# so only tested code reaches the live site.
+#
+# TWO THINGS ABOUT workflow_run THAT WILL CONFUSE YOU ONCE, AND ONLY ONCE:
+#
+# 1. It only fires for the version of this file that is ON THE DEFAULT BRANCH. While
+#    deploy.yml exists only on your feature branch, opening a pull request deploys nothing
+#    and the Actions tab shows no Deploy run. That is correct. MERGE IT FIRST, then watch the
+#    next CI run on main trigger it. This is the one workflow you cannot test from a PR.
+#
+# 2. `workflows: ["CI"]` matches the workflow's NAME, not its filename. Your caller workflow
+#    (ci-caller.yml) is named CI. If you have two workflows named CI, delete one.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+  # Manual trigger, so the runbook you write in Lesson 20 has a real button to describe.
+  workflow_dispatch:
+
+# LEAST PRIVILEGE (Lesson 17) plus the extra permissions a Pages deploy needs.
+permissions:
+  contents: read
+  pages: write        # publish to Pages
+  id-token: write     # deploy-pages authenticates with OIDC, not a stored token
+
+# Never run two deployments at once; a newer one supersedes an in-flight one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    # THE GUARD: skip unless the upstream CI run concluded successfully.
+    # A manual workflow_dispatch run has no workflow_run context, so allow that through too.
+    if: >-
+      ${{ github.event_name == 'workflow_dispatch' ||
+          github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # Checkout first — the local composite action on the next line is read from the workspace.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: ./.github/actions/setup-project
+
+      # THE FOUR PAGES STEPS: configure -> build -> upload -> deploy.
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
+        with:
+          path: ./dist
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346  # v5.0.1
