@@ -1,0 +1,29 @@
+name: CodeQL
+
+# CUSTOM CODE SCANNING (Part 3). This replaces GitHub's one-click default setup with a workflow
+# you own, so you control WHEN it runs, HOW the code builds, and can make it a REQUIRED check
+# on main in branch protection.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"   # also scan weekly, so newly-published rules find old code
+
+permissions:
+  contents: read
+  security-events: write   # required so CodeQL can upload its findings
+  actions: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # The three CodeQL steps: init -> autobuild -> analyze.
+      - uses: github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938  # v4.37.9
+        with:
+          languages: javascript-typescript
+      - uses: github/codeql-action/autobuild@cdf488f595d80d6e07e03d4674febd5ab45fa938  # v4.37.9
+      - uses: github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938  # v4.37.9

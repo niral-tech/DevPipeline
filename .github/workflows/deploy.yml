@@ -16,6 +16,7 @@ name: Deploy to Pages
 on:
   workflow_run:
     workflows: ["CI"]
+    branches: [main]
     types: [completed]
   # Manual trigger, so the runbook you write in Lesson 20 has a real button to describe.
   workflow_dispatch:
