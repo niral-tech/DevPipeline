@@ -1,0 +1,25 @@
+version: 2
+
+# DEPENDENCY UPDATES (Part 2). Cover BOTH npm (application dependencies) and
+# github-actions (the actions your workflows pin). The `groups` key bundles
+# related development-dependency updates into ONE pull request instead of one
+# per package — far less noise, so the updates actually get reviewed and merged.
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      dev-dependencies:
+        dependency-type: "development"
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        patterns:
+          - "*"
