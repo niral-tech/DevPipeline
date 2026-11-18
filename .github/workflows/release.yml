@@ -1,0 +1,38 @@
+name: Release
+
+# AUTOMATED RELEASES (Part 1). Runs after CI succeeds on main. semantic-release reads the
+# Conventional Commit messages since the last release, decides the next version
+# (fix -> patch, feat -> minor, breaking -> major), generates the notes, and publishes a
+# GitHub Release — with no human choosing the version number.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+permissions:
+  contents: write        # create tags and releases
+  issues: write          # comment on issues referenced by released commits
+  pull-requests: write
+
+jobs:
+  release:
+    # Only release on a successful CI run of the main branch.
+    if: >-
+      ${{ github.event.workflow_run.conclusion == 'success' &&
+          github.event.workflow_run.head_branch == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          # FULL history. semantic-release has to read every commit since the last tag to
+          # decide the next version. The default shallow checkout gives it one commit, and it
+          # concludes there is nothing to release — silently.
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version: 24
+          cache: "npm"
+      - run: npm ci
+      - run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
