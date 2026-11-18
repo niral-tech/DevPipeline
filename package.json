@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "test": "jest",
     "test-coverage": "jest --coverage",
+    "build": "node build.js",
     "test:coverage": "jest --coverage --coverageReporters=json-summary --coverageReporters=text"
   },
   "repository": {

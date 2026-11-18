@@ -47,4 +47,4 @@ jobs:
       - uses: ./.github/actions/setup-project
         with:
           node-version: ${{ inputs.node-version }}
-      - run: echo "Build step (nothing to compile yet) — pipeline is green."
+      - run: npm run build
