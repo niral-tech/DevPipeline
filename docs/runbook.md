@@ -27,11 +27,15 @@ is visible (check the version line / a known string). A green badge is not proof
 
 Use when a release is broken and you must return to the last known-good version.
 
-1. Identify the last good release under **Releases** (note its tag, e.g. `v1.2.0`).
-2. Re-deploy that version: either re-run the **Deploy** run associated with that
-   tag, or check out the tag and trigger a manual deployment (Procedure 1).
-3. If the bad change is on `main`, open a `revert` PR for the offending commit(s)
-   so the code and future releases are corrected too.
+1. Identify the last good release under **Releases** and note its tag (e.g. `v1.0.0`).
+2. Find the commit that tag points to: `git rev-list -n 1 <tag>`.
+3. Re-deploy that commit: in **Actions → Deploy to Pages**, open the run for that commit
+   (match the commit message and short hash) and choose **Re-run all jobs**.
+   Do not use **Run workflow** on `main` for this: it redeploys the current (bad) code.
+4. Correct `main` so future releases are right: `git switch -c revert/<name>`, then
+   `git revert <bad-commit> --no-commit` and
+   `git commit -m "fix: revert <what you reverted>"`. Open a PR with the same conventional
+   title and merge it. The `fix:` title makes the release tool cut a corrective patch release.
 
 **Verify:** open the live site and confirm it shows the known-good version;
 confirm the **Releases** page reflects the intended current release.
